@@ -10,6 +10,7 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
+    "constant-db64": "^3.0.0",
     "nbtify": "^1.85.0"
   },
   "devDependencies": {

@@ -1,0 +1,19 @@
+{
+  "name": "goomba-craft",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --project ./tsconfig.build.json",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "nbtify": "^1.85.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "typescript": "^5.3.3"
+  }
+}

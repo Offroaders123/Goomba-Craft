@@ -1,0 +1,3 @@
+[submodule "node-cdb"]
+	path = node-cdb
+	url = https://github.com/Offroaders123/node-cdb

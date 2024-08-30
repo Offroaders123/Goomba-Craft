@@ -10,11 +10,10 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
-    "constant-db64": "^3.0.0",
-    "nbtify": "^1.85.0"
+    "nbtify": "^2.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.11.17",
-    "typescript": "^5.3.3"
+    "@types/node": "^22.5.1",
+    "typescript": "^5.5.4"
   }
 }

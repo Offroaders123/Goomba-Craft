@@ -1,13 +1,18 @@
-import { fileURLToPath } from "node:url";
-import { Readable } from "constant-db64";
+import { readFile, writeFile } from "node:fs/promises";
+import { read, stringify } from "nbtify";
 
-const world: string = fileURLToPath(new URL("./world/9gAAAAsyAwA/db/cdb/index.cdb",import.meta.url));
+const player = await readFile("./slt18.vdb");
+console.log(player);
 
-const db = new Readable(world);
-await db.open();
+const nbt = await read(player.subarray(0x35), {
+  rootName: true,
+  endian: "little",
+  compression: null,
+  bedrockLevel: false,
+  strict: false
+});
+console.log(nbt);
 
-console.log(db);
+const snbt = stringify(nbt, { space: 2 });
 
-for await (const key of db.getIterator()){
-  console.log(key);
-}
+await writeFile("./player.snbt", snbt);

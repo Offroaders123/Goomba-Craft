@@ -6,7 +6,13 @@ import { readVDB } from "../src/index.js";
 
 const world: string = fileURLToPath(new URL("./world/9gAAAAsyAwA", import.meta.url));
 
-await readVDBS(world);
+await readCDBS(world);
+// await readVDBS(world);
+
+async function readCDBS(path: string): Promise<void> {
+  const cdbs: DirFile[] = await readDirFiles(join(path, "db/cdb"), "slt");
+  console.log(cdbs.map(([ name ]) => name), "\n");
+}
 
 async function readVDBS(path: string): Promise<void> {
 const vdbs: DirFile[] = await readDirFiles(join(path, "db/vdb"), "slt");

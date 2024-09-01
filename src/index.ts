@@ -1,5 +1,9 @@
 import { read, type NBTData } from "nbtify";
 
+export function readCDB(data: Uint8Array) {
+  return data;
+}
+
 export async function readVDB(data: Uint8Array): Promise<NBTData> {
   let byteOffset: number = 0x23;
   while (true) {

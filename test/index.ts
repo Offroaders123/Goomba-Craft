@@ -2,7 +2,7 @@ import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { RootTag } from "nbtify";
-import { readVDB } from "../src/index.js";
+import { readCDB, readVDB } from "../src/index.js";
 
 const world: string = fileURLToPath(new URL("./world/9gAAAAsyAwA", import.meta.url));
 
@@ -12,19 +12,25 @@ await readCDBS(world);
 async function readCDBS(path: string): Promise<void> {
   const cdbs: DirFile[] = await readDirFiles(join(path, "db/cdb"), "slt");
   console.log(cdbs.map(([ name ]) => name), "\n");
+
+  const cdbdatas: [string, Uint8Array][] = cdbs.map(([ name, data ]) => [name, readCDB(data)]);
+
+  for (const cdbdata of cdbdatas) {
+    console.log(...cdbdata, "\n");
+  }
 }
 
 async function readVDBS(path: string): Promise<void> {
-const vdbs: DirFile[] = await readDirFiles(join(path, "db/vdb"), "slt");
-console.log(vdbs.map(([ name ]) => name), "\n");
+  const vdbs: DirFile[] = await readDirFiles(join(path, "db/vdb"), "slt");
+  console.log(vdbs.map(([ name ]) => name), "\n");
 
-const vnbts: [string, RootTag][] = await Promise.all(
-  vdbs.map(async ([ name, data ]) => [name, (await readVDB(data)).data])
-);
+  const vnbts: [string, RootTag][] = await Promise.all(
+    vdbs.map(async ([ name, data ]) => [name, (await readVDB(data)).data])
+  );
 
-for (const vnbt of vnbts) {
-  console.log(...vnbt, "\n");
-}
+  for (const vnbt of vnbts) {
+    console.log(...vnbt, "\n");
+  }
 }
 
 type DirFile = [string, Buffer];

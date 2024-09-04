@@ -11,7 +11,7 @@ await readCDBS(world);
 
 async function readCDBS(path: string): Promise<void> {
   const cdbs: DirFile[] = await readDirFiles(join(path, "db/cdb"), "slt");
-  console.log(cdbs.map(([ name ]) => name), "\n");
+  // console.log(cdbs.map(([ name ]) => name), "\n");
 
   const cdbdatas: [string, Uint8Array][] = cdbs.map(([ name, data ]) => [name, readCDB(data)]);
 

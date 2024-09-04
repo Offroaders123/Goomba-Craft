@@ -2,7 +2,7 @@ import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { RootTag } from "nbtify";
-import { readCDB, readVDB } from "../src/index.js";
+import { type Chunk, readCDB, readVDB } from "../src/index.js";
 
 const world: string = fileURLToPath(new URL("./world/9gAAAAsyAwA", import.meta.url));
 
@@ -13,7 +13,9 @@ async function readCDBS(path: string): Promise<void> {
   const cdbs: DirFile[] = await readDirFiles(join(path, "db/cdb"), "slt");
   // console.log(cdbs.map(([ name ]) => name), "\n");
 
-  const cdbdatas: [string, Uint8Array][] = cdbs.map(([ name, data ]) => [name, readCDB(data)]);
+  const cdbdatas: [string, (Chunk | null)[]][] = await Promise.all(
+    cdbs.map(async ([ name, data ]) => [name, await readCDB(data)])
+  );
 
   for (const cdbdata of cdbdatas) {
     console.log(...cdbdata, "\n");

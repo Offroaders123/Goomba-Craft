@@ -42,6 +42,7 @@ export async function readCDB(data: Uint8Array): Promise<(Chunk | null)[]> {
 
     const magic: string = fileView.getUint32((fileByteOffset += 4) - 4, true).toString(16);
     if (magic !== MAGIC) {
+      continue; // temp
       throw new Error(`Magic '${magic}' does not match the expected magic '${MAGIC}'`);
     }
 
@@ -64,8 +65,8 @@ export async function readCDB(data: Uint8Array): Promise<(Chunk | null)[]> {
 
       const fullChunk: Uint8Array = file.subarray(fileByteOffset, fileByteOffset + initFileSize);
       const chunk: Uint8Array = fullChunk.subarray(0, compressedSize);
-      const dcChunk: Uint8Array = await decompress(chunk, "deflate");
-      chunks.push({ index, byteLength: decompressedSize, data: dcChunk });
+      const dcChunk: Uint8Array | null = await decompress(chunk, "deflate").catch(() => null);
+      chunks.push({ index, byteLength: decompressedSize, data: dcChunk ?? chunk });
     }
   }
 

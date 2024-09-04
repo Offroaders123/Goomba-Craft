@@ -1,0 +1,3 @@
+[submodule "lib3DSE"]
+	path = lib3DSE
+	url = https://github.com/DexrnZacAttack/lib3DSE

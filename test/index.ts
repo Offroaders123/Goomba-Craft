@@ -14,12 +14,12 @@ async function readCDBS(path: string): Promise<void> {
   const cdbs: DirFile[] = await readDirFiles(join(path, "db/cdb"), "slt");
   // console.log(cdbs.map(([ name ]) => name), "\n");
 
-  const cdbdatas: [string, (Chunk2 | null)[]][] = await Promise.all(
+  const cdbdatas: PromiseSettledResult<[string, (Chunk2 | null)[]]>[] = await Promise.allSettled(
     cdbs.map(async ([ name, data ]) => [name, await readCDB2(data)])
   );
 
   for (const cdbdata of cdbdatas) {
-    console.log(...cdbdata, "\n");
+    console.log(cdbdata, "\n");
   }
 }
 

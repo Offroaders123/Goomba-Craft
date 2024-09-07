@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { RootTag } from "nbtify";
 import { type Chunk, readCDB, readVDB } from "../src/index.js";
-import { type Chunk as Chunk2, readCDB as readCDB2 } from "../lib3DSE/src/cdb/readCDB.js";
+import { type Chunk as Chunk2, readCDB as readCDB2 } from "../lib3DSE/src/index.js";
 
 const world: string = fileURLToPath(new URL("./world/9gAAAAsyAwA", import.meta.url));
 

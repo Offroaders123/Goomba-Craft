@@ -1,7 +1,7 @@
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import type { RootTag } from "nbtify";
+import { read, stringify, type RootTag } from "nbtify";
 import { type Chunk, readCDB, readVDB } from "../src/index.js";
 import { type Chunk as Chunk2, readCDB as readCDB2 } from "../lib3DSE/src/index.js";
 
@@ -14,13 +14,28 @@ async function readCDBS(path: string): Promise<void> {
   const cdbs: DirFile[] = await readDirFiles(join(path, "db/cdb"), "slt");
   // console.log(cdbs.map(([ name ]) => name), "\n");
 
-  const cdbdatas: PromiseSettledResult<[string, (Chunk2 | null)[]]>[] = await Promise.allSettled(
-    cdbs.map(async ([ name, data ]) => [name, await readCDB2(data)])
+  const cdbdatas: [string, RootTag[]][] = await Promise.all(
+    cdbs.map(async ([ name, data ]) => {
+      const result: Chunk2[] = await readCDB2(data).catch(() => []);
+      const filtered: RootTag[] = (await Promise.all(result
+        .map(data => data.data)
+        .map(data => read(data, {
+          rootName: true,
+          endian: "little",
+          compression: null,
+          bedrockLevel: false
+        }).catch(() => null))))
+        .filter(data => data !== null)
+        .map(data => data.data);
+      return [name, filtered];
+    })
   );
 
   for (const cdbdata of cdbdatas) {
     console.log(cdbdata, "\n");
   }
+
+  // console.log(stringify(Object.fromEntries(cdbdatas), { space: 2 }));
 }
 
 async function readVDBS(path: string): Promise<void> {
